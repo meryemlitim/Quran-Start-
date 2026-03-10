@@ -9,12 +9,12 @@ import { Role } from '../common/enums/role.enum';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async create(name: string, email: string, password: string, role = Role.PARENT): Promise<UserDocument> {
+  async create(name: string, email: string, password: string,phoneNumber:string, role = Role.PARENT): Promise<UserDocument> {
     const exists = await this.userModel.findOne({ email });
     if (exists) throw new ConflictException('Email already in use');
 
     const hashed = await bcrypt.hash(password, 10);
-    const user = new this.userModel({ name, email, password: hashed, role });
+    const user = new this.userModel({ name, email, password: hashed, phoneNumber, role });
     return user.save();
   }
 

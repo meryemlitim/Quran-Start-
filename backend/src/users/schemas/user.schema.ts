@@ -18,8 +18,8 @@ export class User {
   @Prop({ type: String, enum: Role, default: Role.PARENT })
   role: Role;
 
-  @Prop()
-  phoneNumber: number
+  @Prop({trime:true})
+  phoneNumber: string
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
