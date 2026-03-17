@@ -1,6 +1,7 @@
-import { Controller, Get, UseGuards,Request} from '@nestjs/common';
+import { Controller, Get, UseGuards,Request, Patch, Body} from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ProgressService } from './progress.service';
+import { updateStepDto } from './dto/update-step.dto';
 
 
 @UseGuards(JwtAuthGuard)
@@ -11,6 +12,11 @@ export class ProgressController {
  @Get('me')
  getMyProgress(@Request() req){
     return this.progressService.findByUser(req.user.userId);
+ }
+
+ @Patch('step')
+ updateStep(@Request() req, @Body() dto:updateStepDto){
+    return this.progressService.updateStep(req.user.userId, dto.step);
  }
 
 
