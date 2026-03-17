@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { Progress, ProgressDocument } from "./schemas/progress.schema";
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
@@ -19,5 +19,12 @@ export class ProgressService {
       unlockedSorats: [1],
     });
     return progress.save();
+  }
+  async findByUser(userId:string){
+    const progress = await this.progressModel.findOne({userId});
+    if(!progress){
+        throw new NotFoundException("Progress not found");
+    }
+    return progress;
   }
 }
