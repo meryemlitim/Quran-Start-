@@ -32,11 +32,11 @@ export class ProgressService {
 
   async updateStep(userId: string, newStep: Step): Promise<ProgressDocument> {
     const progress = await this.progressModel.findOne({ userId });
-      const valideTransition = {
-          [Step.READING]: Step.MEMORIZING,
-          [Step.MEMORIZING]: Step.QUIZ,
-          [Step.QUIZ]: Step.READING,
-        };
+    const valideTransition = {
+      [Step.READING]: Step.MEMORIZING,
+      [Step.MEMORIZING]: Step.QUIZ,
+      [Step.QUIZ]: Step.READING,
+    };
     if (!progress) {
       throw new NotFoundException('Progress not found');
     }
@@ -44,11 +44,19 @@ export class ProgressService {
     if (valideTransition[progress.step] !== newStep) {
       throw new Error(`Invalid step transition: ${progress.step} → ${newStep}`);
     }
-    progress.step= newStep;   
-    if(newStep === Step.MEMORIZING){
-        progress.currentAya = 1;
+    progress.step = newStep;
+    if (newStep === Step.MEMORIZING) {
+      progress.currentAya = 1;
     }
     return progress.save();
   }
 
+  async nextAya(userId: string): Promise<ProgressDocument>  {
+    const progress = await this.progressModel.findOne({ userId });
+    if (!progress) {
+      throw new NotFoundException('Progress not found');
+    }
+    progress.currentAya++;
+    return progress.save();
+  }
 }
