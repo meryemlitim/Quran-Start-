@@ -24,4 +24,9 @@ export class ProgressController {
     return this.progressService.nextAya(req.user.userId);
  }
 
+ @Get('dashboard')
+ getDashboard(@Request() req){
+    return this.progressService.getDashboard(req.user.userId);
+ }
+
 }

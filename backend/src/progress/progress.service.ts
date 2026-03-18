@@ -59,4 +59,19 @@ export class ProgressService {
     progress.currentAya++;
     return progress.save();
   }
+
+  async getDashboard(userId:string){
+    const progress = await this.findByUser(userId);
+    return {
+        currentHizb: progress.currentHizb,
+        currentSorat: progress.currentSorat,
+        currentAya: progress.currentAya,
+        step:progress.step,
+        totalCompleted:progress.completedSorats.length,
+        completedSorats:progress.completedSorats,
+        unlockedHizbs:progress.unlockedHizbs,
+        totalStars:progress.stars,
+        badges:progress.badges,
+    };
+  }
 }
