@@ -31,16 +31,12 @@ export class ProgressService {
   }
 
   async updateStep(userId: string, newStep: Step): Promise<ProgressDocument> {
-    const progress = await this.progressModel.findOne({ userId });
+    const progress = await this.findByUser(userId);
     const valideTransition = {
       [Step.READING]: Step.MEMORIZING,
       [Step.MEMORIZING]: Step.QUIZ,
       [Step.QUIZ]: Step.READING,
     };
-    if (!progress) {
-      throw new NotFoundException('Progress not found');
-    }
-
     if (valideTransition[progress.step] !== newStep) {
       throw new Error(`Invalid step transition: ${progress.step} → ${newStep}`);
     }
@@ -51,27 +47,24 @@ export class ProgressService {
     return progress.save();
   }
 
-  async nextAya(userId: string): Promise<ProgressDocument>  {
-    const progress = await this.progressModel.findOne({ userId });
-    if (!progress) {
-      throw new NotFoundException('Progress not found');
-    }
+  async nextAya(userId: string): Promise<ProgressDocument> {
+    const progress = await this.findByUser(userId);
     progress.currentAya++;
     return progress.save();
   }
 
-  async getDashboard(userId:string){
+  async getDashboard(userId: string) {
     const progress = await this.findByUser(userId);
     return {
-        currentHizb: progress.currentHizb,
-        currentSorat: progress.currentSorat,
-        currentAya: progress.currentAya,
-        step:progress.step,
-        totalCompleted:progress.completedSorats.length,
-        completedSorats:progress.completedSorats,
-        unlockedHizbs:progress.unlockedHizbs,
-        totalStars:progress.stars,
-        badges:progress.badges,
+      currentHizb: progress.currentHizb,
+      currentSorat: progress.currentSorat,
+      currentAya: progress.currentAya,
+      step: progress.step,
+      totalCompleted: progress.completedSorats.length,
+      completedSorats: progress.completedSorats,
+      unlockedHizbs: progress.unlockedHizbs,
+      totalStars: progress.stars,
+      badges: progress.badges,
     };
   }
 }
