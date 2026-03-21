@@ -34,4 +34,11 @@ export class QuranService {
 
   return result;
 }
+
+async getSorats(hizb:number) {
+const data = await fetch(`https://api.qurani.ai/gw/qh/v1/hizb/${hizb}`);
+const sorats =await data.json();
+return sorats.data.surahs;
+
+}
 }
