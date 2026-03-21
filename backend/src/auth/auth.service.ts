@@ -4,16 +4,21 @@ import * as bcrypt from 'bcryptjs';
 import { UsersService } from '../users/users.service';
 import { Role } from '../common/enums/role.enum';
 import { RegisterDto } from './dto/register.dto';
+import { ProgressService } from 'src/progress/progress.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private progressService: ProgressService,
   ) {}
 
   async register(dto: RegisterDto) {
   const user = await this.usersService.create(dto);
+  
+  // Auto-create progress
+  await this.progressService.create(user._id.toString());
   return this.login(user);
 }
 
