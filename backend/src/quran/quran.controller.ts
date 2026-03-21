@@ -15,5 +15,9 @@ export class QuranController {
  getSorats(@Param('hizb') hizb:number){
     return this.quranService.getSorats(hizb);
  }
+ @Get('ayats/:sorah')
+ getAyats(@Param('sorah') sorah:number){
+    return this.quranService.getAyats(sorah);
+ }
 
 }
