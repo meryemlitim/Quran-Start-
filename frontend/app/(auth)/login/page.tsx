@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { loginUser } from "@/lib/auth";
+import { loginUser, saveSession } from "@/lib/auth";
 
 import { Mail, Lock, Eye, EyeOff, Sparkles, BookOpen } from "lucide-react";
 
@@ -28,9 +28,8 @@ export default function LoginPage() {
         password: form.password,
       });
 
-      // Save token and user
-      localStorage.setItem("token", res.access_token);
-      localStorage.setItem("user", JSON.stringify(res.user));
+     saveSession(res.access_token, res.user);
+
 
       // Redirect based on role
       if (res.user.role === "admin") {

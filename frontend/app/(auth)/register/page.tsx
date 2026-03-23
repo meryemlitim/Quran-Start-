@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { registerUser } from "@/lib/auth";
+import { registerUser, saveSession } from "@/lib/auth";
 import {
   User,
   Mail,
@@ -58,9 +58,8 @@ export default function RegisterPage() {
         childName: form.childName,
         childAge: Number(form.childAge),
       });
-      // Save token and user
-      localStorage.setItem("token", res.access_token);
-      localStorage.setItem("user", JSON.stringify(res.user));
+     saveSession(res.access_token, res.user);
+
 
       router.push("/dashboard");
     } catch (err: any) {
