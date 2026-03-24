@@ -26,3 +26,10 @@ export const saveSession = (token: string, user: object) => {
   Cookies.set("user", JSON.stringify(user), { expires: 7 });
 };
 
+
+export const logout = () => {
+  Cookies.remove("token");
+  Cookies.remove("user");
+  window.location.href = "/";
+};
+
