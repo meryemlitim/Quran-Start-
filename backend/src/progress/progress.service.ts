@@ -3,6 +3,8 @@ import { Progress, ProgressDocument } from './schemas/progress.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Step } from 'src/common/enums/step.enum';
+import soratCount from 'src/utils/soratCount';
+import Surah from 'src/utils/surah-api';
 
 @Injectable()
 export class ProgressService {
@@ -66,5 +68,15 @@ export class ProgressService {
       totalStars: progress.stars,
       badges: progress.badges,
     };
+  }
+  async completeSorah(userId:string, hizb:number, sorah:number, aya:number) {
+    const progress = await this.findByUser(userId);
+    const hizbs = soratCount();
+    const countSorah = hizbs[hizb];
+    const sorahInHizb = Surah();
+    const sorahInHizbArr = sorahInHizb[hizb];
+    console.log(sorahInHizbArr[countSorah-1]);
+    const lastSorah = sorahInHizbArr[countSorah-1].number
+    return  lastSorah;
   }
 }

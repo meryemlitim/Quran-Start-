@@ -1,4 +1,4 @@
-export default function Surah(hizb:number){
+export default function Surah(){
     const  sorah =  {
 60: [
 { number: 87, name: "الأعلى", englishName: "Al-A'la", numberOfAyahs: 19 },
@@ -75,12 +75,10 @@ export default function Surah(hizb:number){
 ],
 
 54: [
-{ number: 57, name: "الحديد", englishName: "Al-Hadid", numberOfAyahs: 29 }
-],
-
-53: [
 { number: 55, name: "الرحمن", englishName: "Ar-Rahman", numberOfAyahs: 78 },
-{ number: 56, name: "الواقعة", englishName: "Al-Waqi'ah", numberOfAyahs: 96 }
+{ number: 56, name: "الواقعة", englishName: "Al-Waqi'ah", numberOfAyahs: 96 },
+{ number: 57, name: "الحديد", englishName: "Al-Hadid", numberOfAyahs: 29 }
+
 ]
 
 };

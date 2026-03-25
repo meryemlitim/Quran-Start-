@@ -50,7 +50,7 @@ async getHizbs() {
   }
 }
 async getSorats(hizb: number) {
-const fallbackSorats = Surah(hizb)
+const fallbackSorats = Surah()
   try {
 
     const res = await fetch(`https://api.qurani.ai/gw/qh/v1/hizb/${hizb}`);
