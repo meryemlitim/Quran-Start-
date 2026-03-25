@@ -1,5 +1,6 @@
 "use client";
 import { BookOpen, Lock, ChevronRight, CheckCircle, Star, ChevronLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface Progress {
   currentSorat: number;
@@ -35,6 +36,7 @@ export default function SoratsView({
 
   const isSoratUnlocked = (n: number) => progress.unlockedSorats.includes(n);
   const isSoratCompleted = (n: number) => progress.completedSorats.includes(n);
+    const router = useRouter();
 
   return (
     <>
@@ -80,6 +82,7 @@ export default function SoratsView({
             return (
               <div
                 key={sorat.number}
+onClick={() => unlocked && router.push(`/learning/${sorat.number}/${encodeURIComponent(sorat.name)}`)}
                 className={`
                   bg-white rounded-2xl p-5 border-2 flex items-center justify-between transition-all duration-200
                   ${completed

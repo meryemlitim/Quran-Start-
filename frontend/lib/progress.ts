@@ -5,3 +5,8 @@ export const getMyProgress = async() => {
     console.log(myProgress.data);
     return myProgress.data;
 }
+
+export const updateStep = async (step: string) => {
+  const res = await api.patch("/progress/step", { step });
+  return res.data;
+};

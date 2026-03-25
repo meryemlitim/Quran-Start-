@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import { Noto_Sans, Noto_Naskh_Arabic } from 'next/font/google';
 import './globals.css';
-
+<link
+  href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap"
+  rel="stylesheet"
+/>
 const notoSans = Noto_Sans({
   subsets: ['latin'],
   variable: '--font-latin',
