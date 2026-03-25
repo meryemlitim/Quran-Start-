@@ -1,45 +1,73 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import Hizbs from 'src/utils/hizbs-api';
+import Surah from 'src/utils/surah-api';
 
 @Injectable()
 export class QuranService {
- async getHizbs() {
-  const res = await fetch('https://api.qurani.ai/gw/qh/v1/hizb/metadata');
-  const data = await res.json();
+async getHizbs() {
+  try {
+    const res = await fetch('https://api.qurani.ai/gw/qh/v1/hizb/metadata');
 
-  const result: any[] = [];
+    if (!res.ok) {
+      throw new Error("API not responding");
+    }
 
-  const hizbs = data.data.hizbs
-    .map((h: any) => ({
-      number: h.number,
-      name: h.firstSurah.englishName
-    }))
-    .reverse()
-    .slice(0, 6);
+    const data = await res.json();
 
-  for (const hizb of hizbs) {
-    const hizbRes = await fetch(
-      `https://api.qurani.ai/gw/qh/v1/hizb/${hizb.number}`
-    );
+    const result: any[] = [];
 
-    const hizbData = await hizbRes.json();
+    const hizbs = data.data.hizbs
+      .map((h: any) => ({
+        number: h.number,
+        name: h.firstSurah.englishName
+      }))
+      .reverse()
+      .slice(0, 6);
 
-    const soratCount = hizbData.data.surahs.length;
+    for (const hizb of hizbs) {
 
-    result.push({
-      hizb: hizb.number,
-      name: hizb.name,
-      soratCount
-    });
+      const hizbRes = await fetch(
+        `https://api.qurani.ai/gw/qh/v1/hizb/${hizb.number}`
+      );
+
+      const hizbData = await hizbRes.json();
+
+      const soratCount = hizbData.data.surahs.length;
+
+      result.push({
+        hizb: hizb.number,
+        name: hizb.name,
+        soratCount
+      });
+    }
+
+    return result;
+
+  } catch (error) {
+
+    return Hizbs();
+
   }
-
-  return result;
 }
+async getSorats(hizb: number) {
+const fallbackSorats = Surah(hizb)
+  try {
 
-async getSorats(hizb:number) {
-const data = await fetch(`https://api.qurani.ai/gw/qh/v1/hizb/${hizb}`);
-const sorats =await data.json();
-return sorats.data.surahs;
+    const res = await fetch(`https://api.qurani.ai/gw/qh/v1/hizb/${hizb}`);
 
+    if (!res.ok) {
+      throw new Error("API error");
+    }
+
+    const data = await res.json();
+
+    return data.data.surahs;
+
+  } catch (error) {
+
+    return fallbackSorats[hizb] || [];
+
+  }
 }
 
 async getAyats(sorah:number){
