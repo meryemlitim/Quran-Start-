@@ -18,3 +18,9 @@ export const getAyats = async (sorat: number) => {
 export const getAudioUrl = (soratNumber: number): string => {
   return `https://server8.mp3quran.net/afs/${String(soratNumber).padStart(3, "0")}.mp3`;
 };
+
+export const getAyatAudioUrl = (soratNumber: number, ayaNumber: number): string => {
+  return `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${
+    soratNumber * 1000 + ayaNumber  
+  }.mp3`;
+};

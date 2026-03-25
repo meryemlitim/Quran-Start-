@@ -27,16 +27,16 @@ export default function SoratsView({
   const hizbProgress =
     sorats.length > 0
       ? Math.round(
-          (sorats.filter((s) => progress.completedSorats.includes(s.number))
-            .length /
-            sorats.length) *
-            100
-        )
+        (sorats.filter((s) => progress.completedSorats.includes(s.number))
+          .length /
+          sorats.length) *
+        100
+      )
       : 0;
 
   const isSoratUnlocked = (n: number) => progress.unlockedSorats.includes(n);
   const isSoratCompleted = (n: number) => progress.completedSorats.includes(n);
-    const router = useRouter();
+  const router = useRouter();
 
   return (
     <>
@@ -82,8 +82,23 @@ export default function SoratsView({
             return (
               <div
                 key={sorat.number}
-onClick={() => unlocked && router.push(`/learning/${sorat.number}/${encodeURIComponent(sorat.name)}`)}
-                className={`
+                onClick={() => {
+                  if (unlocked) {
+                    if (isCurrent) {
+                      if (progress.step === "reading") {
+                        console.log("reading")
+                        router.push(`/learning/${sorat.number}/${encodeURIComponent(sorat.name)}`);
+                        
+                      } else {
+                        console.log("memorizing")  
+                        router.push(`/learning/${sorat.number}/${encodeURIComponent(sorat.name)}/memorizing`);
+                      }
+                    } else {
+                      console.log("not current")   
+                      router.push(`/learning/${sorat.number}/${encodeURIComponent(sorat.name)}`);
+                    }
+                  }
+                }} className={`
                   bg-white rounded-2xl p-5 border-2 flex items-center justify-between transition-all duration-200
                   ${completed
                     ? "border-orange-200 bg-orange-50"

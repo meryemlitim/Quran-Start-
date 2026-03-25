@@ -159,7 +159,7 @@ const soratName = decodeURIComponent(Array.isArray(params.name) ? params.name[0]
         } catch (err) {
             console.error(err);
         }
-        router.push(`/learning/${soratNumber}/memorizing`);
+        router.push(`/learning/${soratNumber}/${soratName}/memorizing`);
     };
 
     if (loading) {
