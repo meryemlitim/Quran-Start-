@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Step } from 'src/common/enums/step.enum';
 import soratCount from 'src/utils/soratCount';
 import Surah from 'src/utils/surah-api';
+import Hizbs from 'src/utils/hizbs-api';
 
 @Injectable()
 export class ProgressService {
@@ -53,20 +54,27 @@ export class ProgressService {
     return progress.save(); 
   }
 
-  async getDashboard(userId: string) {
-    const progress = await this.findByUser(userId);
-    return {
-      currentHizb: progress.currentHizb,
-      currentSorat: progress.currentSorat,
-      currentAya: progress.currentAya,
-      step: progress.step,
-      totalCompleted: progress.completedSorats.length,
-      completedSorats: progress.completedSorats,
-      unlockedHizbs: progress.unlockedHizbs,
-      totalStars: progress.stars,
-      badges: progress.badges,
-    };
-  }
+async getDashboard(userId: string) {
+  const progress = await this.findByUser(userId);
+
+  const hizbSorats = Surah()[progress.currentHizb];
+  const currentSorah = hizbSorats.find(
+    s => s.number === progress.currentSorat
+  );
+
+  return {
+    currentHizb: progress.currentHizb,
+    currentSorat: progress.currentSorat,
+    currentAya: progress.currentAya,
+    currentSorahName: currentSorah?.englishName,
+    step: progress.step,
+    totalCompleted: progress.completedSorats.length,
+    completedSorats: progress.completedSorats,
+    unlockedHizbs: progress.unlockedHizbs,
+    totalStars: progress.stars,
+    badges: progress.badges,
+  };
+}
   async completeSorah(userId: string,sorah:number) {
     const progress = await this.findByUser(userId);
     if (progress.currentSorat == sorah) {

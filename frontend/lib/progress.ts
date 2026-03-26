@@ -19,3 +19,8 @@ export const completeSorah = async (soratNumber:number) => {
   const res = await api.put(`/progress/complete-sorah/${soratNumber}`);
   return res.data;
 }
+
+export const getDashboard = async () => {
+  const res = await api.get("/progress/dashboard");
+  return res.data;
+}
