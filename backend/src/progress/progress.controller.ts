@@ -20,9 +20,9 @@ export class ProgressController {
     return this.progressService.updateStep(req.user.userId, dto.step);
  }
 
- @Patch('aya')
- nextAya(@Request() req){
-    return this.progressService.nextAya(req.user.userId);
+ @Patch('aya/:sorah')
+ nextAya(@Request() req ,@Param() sorah:number){
+    return this.progressService.nextAya(req.user.userId,sorah);
  }
 
  @Get('dashboard')
@@ -30,9 +30,9 @@ export class ProgressController {
     return this.progressService.getDashboard(req.user.userId);
  }
 
- @Put('complete-sorah')
- completeSorah(@Request() req,){
-   return  this.progressService.completeSorah(req.user.userId)
+ @Put('complete-sorah/:sorah')
+ completeSorah(@Request() req,@Param() sorah:number){
+   return  this.progressService.completeSorah(req.user.userId,sorah)
  }
 
 }

@@ -11,12 +11,13 @@ export const updateStep = async (step: string) => {
   return res.data;
 };
 
-export const nextAya = async () => {
-  const res = await api.patch("/progress/aya");
+export const nextAya = async (soratNumber:number) => {
+  const res = await api.patch(`/progress/aya/${soratNumber}`);
   return res.data;
 };
 
-export const completeSorah = async () => {
-  const res = await api.put("/progress/complete-sorah");
+export const completeSorah = async (soratNumber:number) => {
+  const res = await api.put(`/progress/complete-sorah/${soratNumber}`);
+  console.log("lasta soraaaaaaaaaaaaaah");
   return res.data;
 }
