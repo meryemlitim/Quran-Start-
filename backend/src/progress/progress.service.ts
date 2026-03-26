@@ -43,10 +43,12 @@ export class ProgressService {
     return progress.save();
   }
 
-  async nextAya(userId: string): Promise<ProgressDocument> {
+  async nextAya(userId: string, sorah: number): Promise<ProgressDocument> {
     const progress = await this.findByUser(userId);
-    progress.currentAya++;
-    return progress.save();
+    if (progress.currentSorat === sorah) {
+      progress.currentAya++;
+    }
+    return progress.save(); 
   }
 
   async getDashboard(userId: string) {
@@ -63,36 +65,42 @@ export class ProgressService {
       badges: progress.badges,
     };
   }
-  async completeSorah(userId: string) {
+  async completeSorah(userId: string,sorah:number) {
     const progress = await this.findByUser(userId);
-    if (!progress.completedSorats.includes(progress.currentSorat)) {
-      progress.completedSorats.push(progress.currentSorat);
-    }
-    const numberSorhInHizb = soratCount()[progress.currentHizb];
-    const numOfLastSorahInHizb = Surah()[progress.currentHizb][numberSorhInHizb - 1].number;
-    const numOfFirstSorahInHizb = Surah()[progress.currentHizb-1][0].number;
-    const currentSorahIndex = (Surah()[progress.currentHizb].find(s => s.number === progress.currentSorat).index)+1;
-    const nextSorah = Surah()[progress.currentHizb][currentSorahIndex].number
-    if (numOfLastSorahInHizb === progress.currentSorat) {
-      progress.currentHizb = progress.currentHizb - 1;
-      progress.currentSorat = numOfFirstSorahInHizb;
-      progress.currentAya = 1;
-      progress.step = Step.READING;
-      progress.stars++;
-      if(!progress.unlockedHizbs.includes( progress.currentHizb)){
-        progress.unlockedHizbs.push( progress.currentHizb);
-      }
-      if(!progress.unlockedSorats.includes(numOfFirstSorahInHizb)){
-        progress.unlockedSorats.push(numOfFirstSorahInHizb);
-      }
+    if (progress.currentSorat === sorah) {
 
-    }else{
-      progress.currentSorat = nextSorah;
-      progress.currentAya = 1;
-      progress.step = Step.READING;
-
-      if(!progress.unlockedSorats.includes(nextSorah)){
-        progress.unlockedSorats.push(nextSorah);
+      if (!progress.completedSorats.includes(progress.currentSorat)) {
+        progress.completedSorats.push(progress.currentSorat);
+      }
+      const numberSorhInHizb = soratCount()[progress.currentHizb];
+      const numOfLastSorahInHizb =
+        Surah()[progress.currentHizb][numberSorhInHizb - 1].number;
+      const numOfFirstSorahInHizb = Surah()[progress.currentHizb - 1][0].number;
+      const currentSorahIndex =
+        Surah()[progress.currentHizb].find(
+          (s) => s.number === progress.currentSorat,
+        ).index + 1;
+      const nextSorah = Surah()[progress.currentHizb][currentSorahIndex].number;
+      if (numOfLastSorahInHizb === progress.currentSorat) {
+        progress.currentHizb = progress.currentHizb - 1;
+        progress.currentSorat = numOfFirstSorahInHizb;
+        progress.currentAya = 1;
+        progress.step = Step.READING;
+        progress.stars++;
+        if (!progress.unlockedHizbs.includes(progress.currentHizb)) {
+          progress.unlockedHizbs.push(progress.currentHizb);
+        }
+        if (!progress.unlockedSorats.includes(numOfFirstSorahInHizb)) {
+          progress.unlockedSorats.push(numOfFirstSorahInHizb);
+        }
+      } else {
+        progress.currentSorat = nextSorah;
+        progress.currentAya = 1;
+        progress.step = Step.READING;
+  
+        if (!progress.unlockedSorats.includes(nextSorah)) {
+          progress.unlockedSorats.push(nextSorah);
+        }
       }
     }
     progress.save();

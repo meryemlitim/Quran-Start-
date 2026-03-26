@@ -110,7 +110,7 @@ export default function MemorizingPage() {
 
       if (currentAyaIndex >= ayats.length - 1) {
         try {
-          await completeSorah();
+          await completeSorah(soratNumber);
         } catch (err) {
           console.error(err);
         }
@@ -120,7 +120,7 @@ export default function MemorizingPage() {
       }
 
       try {
-        await nextAya();
+        await nextAya(soratNumber);
       } catch (err) {
         console.error(err);
       }
