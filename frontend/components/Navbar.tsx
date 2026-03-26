@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, X, Users, LogOut } from "lucide-react";
+import { Menu, X, Users, LogOut, ChevronLeft, User, Baby } from "lucide-react";
 import Logo from "./ui/Logo";
 import { logout } from "@/lib/auth";
 
@@ -44,6 +44,38 @@ export default function Navbar() {
     );
   }
 
+  if (isParent) {
+    return (
+      <nav className="bg-white border-b border-orange-100 px-6 py-4 flex items-center justify-between sticky top-0 z-50 shadow-sm">
+        <Logo />
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => router.push("/dashboard")}
+            className="flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-black hover:bg-orange-600 transition-all hover:-translate-y-0.5 shadow-md shadow-orange-200"
+          >
+            <Baby className="w-4 h-4" />            Your Child Space
+          </button>
+          {/* Profile button */}
+          <button
+            onClick={() => router.push("/parent/profile")}
+            className="flex items-center gap-2 bg-orange-50 border border-orange-200 text-orange-600 px-4 py-2 rounded-full text-sm font-black hover:bg-orange-100 transition-all"
+          >
+            <User className="w-4 h-4" />
+            Profile
+          </button>
+        </div>
+        {/* <button
+          onClick={() => router.push("/dashboard")}
+          className="flex items-center gap-1.5 text-orange-500 font-black text-sm hover:underline"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          Back to Child View
+        </button> */}
+
+
+      </nav>
+    );
+  }
   //  Landing navbar
   return (
     <>
