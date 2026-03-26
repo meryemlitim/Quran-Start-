@@ -1,7 +1,8 @@
-import { Controller, Get, UseGuards,Request, Patch, Body} from '@nestjs/common';
+import { Controller, Get, UseGuards,Request, Patch, Body, Put, Param} from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ProgressService } from './progress.service';
 import { updateStepDto } from './dto/update-step.dto';
+import { ParseIntPipe } from '@nestjs/common';
 
 
 @UseGuards(JwtAuthGuard)
@@ -27,6 +28,11 @@ export class ProgressController {
  @Get('dashboard')
  getDashboard(@Request() req){
     return this.progressService.getDashboard(req.user.userId);
+ }
+
+ @Put('complete-sorah')
+ completeSorah(@Request() req,){
+   return  this.progressService.completeSorah(req.user.userId)
  }
 
 }

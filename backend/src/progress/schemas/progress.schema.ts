@@ -9,22 +9,22 @@ export class Progress {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true, unique: true })
   userId: Types.ObjectId;
 
-  @Prop({ default: 1 })
+  @Prop({ default: 60 })
   currentHizb: number;
 
-  @Prop({ default: 1 })
+  @Prop({ default: 87 })
   currentSorat: number;
 
-  @Prop({ default: 0 })
+  @Prop({ default: 1 })
   currentAya: number;
 
   @Prop({ type: String, enum: Step, default: Step.READING })
   step: Step;
 
-  @Prop({ type: [Number], default: [1] })
+  @Prop({ type: [Number], default: [60] })
   unlockedHizbs: number[];
 
-  @Prop({ type: [Number], default: [1] })
+  @Prop({ type: [Number], default: [87] })
   unlockedSorats: number[];
 
   @Prop({ type: [Number], default: [] })
