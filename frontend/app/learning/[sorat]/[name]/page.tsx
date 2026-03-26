@@ -155,7 +155,7 @@ const soratName = decodeURIComponent(Array.isArray(params.name) ? params.name[0]
 
     const handleContinue = async () => {
         try {
-            await updateStep("memorizing");
+            await updateStep("memorizing",soratNumber);
         } catch (err) {
             console.error(err);
         }
