@@ -26,26 +26,28 @@ export class ProgressService {
     return progress;
   }
 
-  async updateStep(userId: string, newStep: Step): Promise<ProgressDocument> {
+  async updateStep(userId: string, newStep: Step,sorah:number): Promise<ProgressDocument> {
     const progress = await this.findByUser(userId);
-    const valideTransition = {
-      [Step.READING]: Step.MEMORIZING,
-      [Step.MEMORIZING]: Step.READING,
-      // [Step.QUIZ]: Step.READING,
-    };
-    if (valideTransition[progress.step] !== newStep) {
-      throw new Error(`Invalid step transition: ${progress.step} → ${newStep}`);
-    }
-    progress.step = newStep;
-    if (newStep === Step.MEMORIZING) {
-      progress.currentAya = 1;
+    if (progress.currentSorat == sorah) {
+      const valideTransition = {
+        [Step.READING]: Step.MEMORIZING,
+        [Step.MEMORIZING]: Step.READING,
+        // [Step.QUIZ]: Step.READING,
+      };
+      if (valideTransition[progress.step] !== newStep) {
+        throw new Error(`Invalid step transition: ${progress.step} → ${newStep}`);
+      }
+      progress.step = newStep;
+      if (newStep === Step.MEMORIZING) {
+        progress.currentAya = 1;
+      }
     }
     return progress.save();
   }
 
   async nextAya(userId: string, sorah: number): Promise<ProgressDocument> {
     const progress = await this.findByUser(userId);
-    if (progress.currentSorat === sorah) {
+    if (progress.currentSorat == sorah) {
       progress.currentAya++;
     }
     return progress.save(); 
@@ -67,7 +69,7 @@ export class ProgressService {
   }
   async completeSorah(userId: string,sorah:number) {
     const progress = await this.findByUser(userId);
-    if (progress.currentSorat === sorah) {
+    if (progress.currentSorat == sorah) {
 
       if (!progress.completedSorats.includes(progress.currentSorat)) {
         progress.completedSorats.push(progress.currentSorat);

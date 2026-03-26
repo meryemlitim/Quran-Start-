@@ -2,12 +2,11 @@ import api from "./axios"
 
 export const getMyProgress = async() => {
     const myProgress = await api.get("/progress/me");
-    console.log(myProgress.data);
     return myProgress.data;
 }
 
-export const updateStep = async (step: string) => {
-  const res = await api.patch("/progress/step", { step });
+export const updateStep = async (step: string,soratNumber:number) => {
+  const res = await api.patch(`/progress/step/${soratNumber}`, { step });
   return res.data;
 };
 
@@ -18,6 +17,5 @@ export const nextAya = async (soratNumber:number) => {
 
 export const completeSorah = async (soratNumber:number) => {
   const res = await api.put(`/progress/complete-sorah/${soratNumber}`);
-  console.log("lasta soraaaaaaaaaaaaaah");
   return res.data;
 }

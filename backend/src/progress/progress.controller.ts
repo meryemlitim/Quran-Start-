@@ -15,13 +15,13 @@ export class ProgressController {
     return this.progressService.findByUser(req.user.userId);
  }
 
- @Patch('step')
- updateStep(@Request() req, @Body() dto:updateStepDto){
-    return this.progressService.updateStep(req.user.userId, dto.step);
+ @Patch('step/:sorah')
+ updateStep(@Request() req,@Param("sorah") sorah:number, @Body() dto:updateStepDto){
+    return this.progressService.updateStep(req.user.userId, dto.step,sorah);
  }
 
  @Patch('aya/:sorah')
- nextAya(@Request() req ,@Param() sorah:number){
+ nextAya(@Request() req ,@Param("sorah") sorah:number){
     return this.progressService.nextAya(req.user.userId,sorah);
  }
 
@@ -31,7 +31,7 @@ export class ProgressController {
  }
 
  @Put('complete-sorah/:sorah')
- completeSorah(@Request() req,@Param() sorah:number){
+ completeSorah(@Request() req,@Param("sorah") sorah:number){
    return  this.progressService.completeSorah(req.user.userId,sorah)
  }
 
