@@ -15,3 +15,8 @@ export const nextAya = async () => {
   const res = await api.patch("/progress/aya");
   return res.data;
 };
+
+export const completeSorah = async () => {
+  const res = await api.put("/progress/complete-sorah");
+  return res.data;
+}

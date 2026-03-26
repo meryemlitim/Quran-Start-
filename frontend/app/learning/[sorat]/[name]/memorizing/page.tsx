@@ -10,7 +10,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { getAyats, getAyatAudioUrl } from "@/lib/quran";
-import { nextAya, updateStep } from "@/lib/progress";
+import { completeSorah, nextAya, updateStep } from "@/lib/progress";
 
 const REQUIRED_REPEATS = 1;
 
@@ -110,7 +110,7 @@ export default function MemorizingPage() {
 
       if (currentAyaIndex >= ayats.length - 1) {
         try {
-        //   await updateStep("quiz");
+          await completeSorah();
         } catch (err) {
           console.error(err);
         }
