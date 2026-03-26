@@ -6,11 +6,14 @@ import { Step } from 'src/common/enums/step.enum';
 import soratCount from 'src/utils/soratCount';
 import Surah from 'src/utils/surah-api';
 import Hizbs from 'src/utils/hizbs-api';
+import { UsersService } from 'src/users/users.service';
+import { unlink } from 'fs';
 
 @Injectable()
 export class ProgressService {
   constructor(
     @InjectModel(Progress.name) private progressModel: Model<ProgressDocument>,
+        private usersService: UsersService,
   ) {}
 
   async create(userId: string): Promise<ProgressDocument> {
@@ -116,4 +119,27 @@ async getDashboard(userId: string) {
     progress.save();
     return progress;
   }
+
+async adminDashboard(userId: string){
+  const users = await this.usersService.getAllUsers();
+  const TotalSoratsCompleted = (await this.progressModel.find().select('completedSorats')).reduce((acc,progress) => acc+progress.completedSorats.length ,0);
+  const TotalStars = (await this.progressModel.find().select('stars')).reduce((acc,progress) => acc+progress.stars ,0);
+  const TopLearner = await this.progressModel
+        .find()
+        .sort({starts:-1})
+        .limit(1)
+        .populate('userId','childName')
+        .exec();
+  if (!TopLearner.length) return null;
+
+  return {
+    user : users,
+    userNumber : users.length,
+    TotalSoratsCompleted:TotalSoratsCompleted,
+    TotalStars : TotalStars,
+    TopLearner : TopLearner[0].userId['childName'],
+  
+  }
+
+}
 }

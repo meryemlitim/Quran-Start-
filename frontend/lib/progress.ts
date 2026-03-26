@@ -24,3 +24,8 @@ export const getDashboard = async () => {
   const res = await api.get("/progress/dashboard");
   return res.data;
 }
+
+export const adminDashboard = async () => {
+  const res = await api.get("/progress/admin");
+  return res.data;
+}

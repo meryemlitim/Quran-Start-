@@ -13,7 +13,8 @@ export default function Navbar() {
 
   const isDashboard = pathname.startsWith("/dashboard");
   const isParent = pathname.startsWith("/parent");
-  const isAdmin = pathname.startsWith("/admin");
+const isAdmin = pathname === "/admin";
+const isAdminUser = pathname.startsWith("/admin/user");
   const isAuth =
     pathname.startsWith("/login") || pathname.startsWith("/register");
 
@@ -33,17 +34,73 @@ export default function Navbar() {
             <Users className="w-4 h-4" />
             Parent Space
           </button>
+          {/* <button
+            onClick={logout}
+            className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-colors"
+          >
+            <LogOut className="w-5 h-5 text-gray-400" />
+          </button> */}
+        </div>
+      </nav>
+    );
+  }
+
+  if (isAdmin) {
+    return (
+      <nav className="bg-white border-b border-orange-100 px-6 py-4 flex items-center justify-between sticky top-0 z-50 shadow-sm">
+        <Logo />
+        <div className="flex items-center gap-4">
+          <nav className="flex items-center gap-1">
+            <NavTab label="Stats" active />
+            <NavTab label="Users" />
+          </nav>
+          {/* Profile button */}
           <button
+            onClick={() => router.push("/parent/profile")}
+            className="flex items-center gap-2 bg-orange-50 border border-orange-200 text-orange-600 px-4 py-2 rounded-full text-sm font-black hover:bg-orange-100 transition-all"
+          >
+            <User className="w-4 h-4" />
+            Profile
+          </button>
+           <button
             onClick={logout}
             className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-colors"
           >
             <LogOut className="w-5 h-5 text-gray-400" />
           </button>
         </div>
+       
       </nav>
     );
   }
-
+  if (isAdminUser) {
+    return (
+      <nav className="bg-white border-b border-orange-100 px-6 py-4 flex items-center justify-between sticky top-0 z-50 shadow-sm">
+        <Logo />
+        <div className="flex items-center gap-4">
+          <nav className="flex items-center gap-1">
+            <NavTab label="Stats"/>
+            <NavTab label="Users" active/>
+          </nav>
+          {/* Profile button */}
+          <button
+            onClick={() => router.push("/parent/profile")}
+            className="flex items-center gap-2 bg-orange-50 border border-orange-200 text-orange-600 px-4 py-2 rounded-full text-sm font-black hover:bg-orange-100 transition-all"
+          >
+            <User className="w-4 h-4" />
+            Profile
+          </button>
+           <button
+            onClick={logout}
+            className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-colors"
+          >
+            <LogOut className="w-5 h-5 text-gray-400" />
+          </button>
+        </div>
+       
+      </nav>
+    );
+  }
   if (isParent) {
     return (
       <nav className="bg-white border-b border-orange-100 px-6 py-4 flex items-center justify-between sticky top-0 z-50 shadow-sm">
@@ -63,16 +120,13 @@ export default function Navbar() {
             <User className="w-4 h-4" />
             Profile
           </button>
+           <button
+            onClick={logout}
+            className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-colors"
+          >
+            <LogOut className="w-5 h-5 text-gray-400" />
+          </button>
         </div>
-        {/* <button
-          onClick={() => router.push("/dashboard")}
-          className="flex items-center gap-1.5 text-orange-500 font-black text-sm hover:underline"
-        >
-          <ChevronLeft className="w-4 h-4" />
-          Back to Child View
-        </button> */}
-
-
       </nav>
     );
   }
@@ -140,5 +194,20 @@ export default function Navbar() {
         </div>
       )}
     </>
+  );
+}
+
+function NavTab({ label, active = false }) {
+  const router = useRouter();
+  return (
+    <button onClick={() => label === "Stats" ?router.push("/admin") :router.push("/admin/user")}
+      className={`px-4 py-1.5 rounded-xl text-sm font-black transition-all ${
+        active
+          ? "bg-orange-500 text-white"
+          : "text-gray-400 hover:text-gray-700"
+      }`}
+    >
+      {label}
+    </button>
   );
 }

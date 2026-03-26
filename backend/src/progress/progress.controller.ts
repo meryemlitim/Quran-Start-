@@ -3,6 +3,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ProgressService } from './progress.service';
 import { updateStepDto } from './dto/update-step.dto';
 import { ParseIntPipe } from '@nestjs/common';
+import { get } from 'http';
 
 
 @UseGuards(JwtAuthGuard)
@@ -33,6 +34,11 @@ export class ProgressController {
  @Put('complete-sorah/:sorah')
  completeSorah(@Request() req,@Param("sorah") sorah:number){
    return  this.progressService.completeSorah(req.user.userId,sorah)
+ }
+
+ @Get('admin')
+ adminDashboard(@Request() req){
+   return this.progressService.adminDashboard(req.user.userId);
  }
 
 }
