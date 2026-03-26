@@ -15,12 +15,6 @@ export class ProgressService {
   async create(userId: string): Promise<ProgressDocument> {
     const progress = new this.progressModel({
       userId,
-      currentHizb: 1,
-      currentSorat: 1,
-      currentAya: 0,
-      step: Step.READING,
-      unlockedHizbs: [1],
-      unlockedSorats: [1],
     });
     return progress.save();
   }
