@@ -30,12 +30,9 @@ export class ProgressController {
     return this.progressService.getDashboard(req.user.userId);
  }
 
- @Put('complete-sorah/:hizb/:sorah/:aya')
- completeSorah(@Request() req,
-  @Param('hizb', ParseIntPipe) hizb: number,
-  @Param('sorah', ParseIntPipe) sorah: number,
-  @Param('aya', ParseIntPipe) aya: number,){
-   return  this.progressService.completeSorah(req.user.userId,hizb,sorah,aya)
+ @Put('complete-sorah')
+ completeSorah(@Request() req,){
+   return  this.progressService.completeSorah(req.user.userId)
  }
 
 }

@@ -36,8 +36,8 @@ export class ProgressService {
     const progress = await this.findByUser(userId);
     const valideTransition = {
       [Step.READING]: Step.MEMORIZING,
-      [Step.MEMORIZING]: Step.QUIZ,
-      [Step.QUIZ]: Step.READING,
+      [Step.MEMORIZING]: Step.READING,
+      // [Step.QUIZ]: Step.READING,
     };
     if (valideTransition[progress.step] !== newStep) {
       throw new Error(`Invalid step transition: ${progress.step} → ${newStep}`);
@@ -69,14 +69,39 @@ export class ProgressService {
       badges: progress.badges,
     };
   }
-  async completeSorah(userId:string, hizb:number, sorah:number, aya:number) {
+  async completeSorah(userId: string) {
     const progress = await this.findByUser(userId);
-    const hizbs = soratCount();
-    const countSorah = hizbs[hizb];
-    const sorahInHizb = Surah();
-    const sorahInHizbArr = sorahInHizb[hizb];
-    console.log(sorahInHizbArr[countSorah-1]);
-    const lastSorah = sorahInHizbArr[countSorah-1].number
-    return  lastSorah;
+    if (!progress.completedSorats.includes(progress.currentSorat)) {
+      progress.completedSorats.push(progress.currentSorat);
+    }
+    const numberSorhInHizb = soratCount()[progress.currentHizb];
+    const numOfLastSorahInHizb = Surah()[progress.currentHizb][numberSorhInHizb - 1].number;
+    const numOfFirstSorahInHizb = Surah()[progress.currentHizb-1][0].number;
+    const currentSorahIndex = (Surah()[progress.currentHizb].find(s => s.number === progress.currentSorat).index)+1;
+    const nextSorah = Surah()[progress.currentHizb][currentSorahIndex].number
+    if (numOfLastSorahInHizb === progress.currentSorat) {
+      progress.currentHizb = progress.currentHizb - 1;
+      progress.currentSorat = numOfFirstSorahInHizb;
+      progress.currentAya = 1;
+      progress.step = Step.READING;
+      progress.stars++;
+      if(!progress.unlockedHizbs.includes( progress.currentHizb)){
+        progress.unlockedHizbs.push( progress.currentHizb);
+      }
+      if(!progress.unlockedSorats.includes(numOfFirstSorahInHizb)){
+        progress.unlockedSorats.push(numOfFirstSorahInHizb);
+      }
+
+    }else{
+      progress.currentSorat = nextSorah;
+      progress.currentAya = 1;
+      progress.step = Step.READING;
+
+      if(!progress.unlockedSorats.includes(nextSorah)){
+        progress.unlockedSorats.push(nextSorah);
+      }
+    }
+    progress.save();
+    return progress;
   }
 }
