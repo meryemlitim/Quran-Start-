@@ -1,16 +1,23 @@
 "use client";
 import { useState, useEffect } from "react";
-import { BookOpen, Star, Trophy, Users} from "lucide-react";
+import { BookOpen, Star, Trophy, Users } from "lucide-react";
 import { adminDashboard } from "@/lib/progress";
 import Navbar from "@/components/Navbar";
 
-async function getAdminDashboard() {
-  const res = adminDashboard();
+interface DashboardData {
+  userNumber: number;
+  TotalSoratsCompleted: number;
+  TotalStars: number;
+  TopLearner: string;
+}
+
+async function getAdminDashboard(): Promise<DashboardData> {
+  const res = await adminDashboard();
   return res;
 }
 
 export default function AdminStats() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,11 +34,17 @@ export default function AdminStats() {
     );
   }
 
+  if (!data) {
+    return (
+      <div className="min-h-screen bg-orange-50 flex items-center justify-center">
+        <p className="text-gray-400 font-semibold">Failed to load dashboard.</p>
+      </div>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-orange-50">
-      {/* ── HEADER ─────────────────────────────────── */}
-      <Navbar/>
-
+      <Navbar />
       <div className="max-w-5xl mx-auto px-6 py-10">
         {/* ── PAGE TITLE ─────────────────────────────── */}
         <div className="mb-10">
@@ -49,29 +62,26 @@ export default function AdminStats() {
             icon={<Users className="w-5 h-5 text-orange-500" />}
             label="Total Users"
             value={data.userNumber}
-            bg="bg-white"
           />
           <BigStatCard
             icon={<BookOpen className="w-5 h-5 text-orange-500" />}
             label="Sorats Completed"
             value={data.TotalSoratsCompleted.toLocaleString()}
-            bg="bg-white"
           />
           <BigStatCard
             icon={<Star className="w-5 h-5 text-orange-500 fill-orange-500" />}
             label="Total Stars Earned"
             value={data.TotalStars.toLocaleString()}
-            bg="bg-white"
           />
         </div>
 
         {/* ── HIGHLIGHT ROW ──────────────────────────── */}
         <div className="grid md:grid-cols-2 gap-4 mb-10">
-          {/* Top Learner */}
           <div className="bg-orange-500 rounded-3xl p-6 text-white flex items-center justify-between">
             <div>
-              <p className="text-orange-100 font-semibold text-sm mb-1">
-                🏆 Top Learner
+              <p className="text-orange-100 font-semibold text-sm mb-1 flex items-center gap-2">
+                <Trophy className="w-4 h-4" />
+                Top Learner
               </p>
               <p className="text-2xl font-black">{data.TopLearner}</p>
               <p className="text-orange-200 text-xs font-semibold mt-1">
@@ -80,23 +90,26 @@ export default function AdminStats() {
             </div>
             <Trophy className="w-12 h-12 text-orange-300 opacity-60" />
           </div>
-
-
-        </div>  
+        </div>
       </div>
     </main>
   );
 }
 
-function BigStatCard({ icon, label, value, bg }) {
+function BigStatCard({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string | number;
+}) {
   return (
-    <div
-      className={`${bg} rounded-2xl p-5 border border-orange-100 shadow-sm text-center`}
-    >
+    <div className="bg-white rounded-2xl p-5 border border-orange-100 shadow-sm text-center">
       <div className="flex justify-center mb-2">{icon}</div>
       <div className="text-2xl font-black text-orange-500 mb-1">{value}</div>
       <div className="text-xs text-gray-400 font-semibold">{label}</div>
     </div>
   );
 }
-

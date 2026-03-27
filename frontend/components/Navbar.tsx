@@ -197,7 +197,7 @@ const isAdminUser = pathname.startsWith("/admin/user");
   );
 }
 
-function NavTab({ label, active = false }) {
+function NavTab({ label, active = false }: { label: string; active?: boolean }) {
   const router = useRouter();
   return (
     <button onClick={() => label === "Stats" ?router.push("/admin") :router.push("/admin/user")}
