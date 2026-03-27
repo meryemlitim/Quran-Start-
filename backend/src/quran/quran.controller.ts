@@ -1,23 +1,20 @@
-import { Controller, Get, UseGuards,Request, Patch, Body, Param} from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Controller, Get, Param } from '@nestjs/common';
 import { QuranService } from './quran.service';
-
 
 @Controller('quran')
 export class QuranController {
- constructor(private quranService: QuranService) {}
- 
- @Get('hizbs')
- getHizbs(){
-    return this.quranService.getHizbs();
- }
- @Get('sorats/:hizb')
- getSorats(@Param('hizb') hizb:number){
-    return this.quranService.getSorats(hizb);
- }
- @Get('ayats/:sorah')
- getAyats(@Param('sorah') sorah:number){
-    return this.quranService.getAyats(sorah);
- }
+  constructor(private quranService: QuranService) {}
 
+  @Get('hizbs')
+  getHizbs() {
+    return this.quranService.getHizbs();
+  }
+  @Get('sorats/:hizb')
+  getSorats(@Param('hizb') hizb: number) {
+    return this.quranService.getSorats(hizb);
+  }
+  @Get('ayats/:sorah')
+  getAyats(@Param('sorah') sorah: number) {
+    return this.quranService.getAyats(sorah);
+  }
 }

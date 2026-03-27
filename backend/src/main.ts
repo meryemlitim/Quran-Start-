@@ -5,14 +5,14 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   console.log('🚀 Starting app...');
   console.log('🔗 MongoDB URI:', process.env.MONGODB_URI);
-  
+
   const app = await NestFactory.create(AppModule);
-   app.enableCors({
-    origin: 'http://localhost:3001', 
+  app.enableCors({
+    origin: 'http://localhost:3001',
     credentials: true,
   });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-  
+
   await app.listen(3000);
   console.log('✅ App running on http://localhost:3000');
 }

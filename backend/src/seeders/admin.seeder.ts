@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module';
-import { UsersService } from '../users/users.service';
 import { Role } from '../common/enums/role.enum';
 import * as bcrypt from 'bcryptjs';
 import { getModelToken } from '@nestjs/mongoose';

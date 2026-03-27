@@ -5,15 +5,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Step } from 'src/common/enums/step.enum';
 import soratCount from 'src/utils/soratCount';
 import Surah from 'src/utils/surah-api';
-import Hizbs from 'src/utils/hizbs-api';
 import { UsersService } from 'src/users/users.service';
-import { unlink } from 'fs';
 
 @Injectable()
 export class ProgressService {
   constructor(
     @InjectModel(Progress.name) private progressModel: Model<ProgressDocument>,
-        private usersService: UsersService,
+    private usersService: UsersService,
   ) {}
 
   async create(userId: string): Promise<ProgressDocument> {
@@ -30,7 +28,11 @@ export class ProgressService {
     return progress;
   }
 
-  async updateStep(userId: string, newStep: Step,sorah:number): Promise<ProgressDocument> {
+  async updateStep(
+    userId: string,
+    newStep: Step,
+    sorah: number,
+  ): Promise<ProgressDocument> {
     const progress = await this.findByUser(userId);
     if (progress.currentSorat == sorah) {
       const valideTransition = {
@@ -39,7 +41,9 @@ export class ProgressService {
         // [Step.QUIZ]: Step.READING,
       };
       if (valideTransition[progress.step] !== newStep) {
-        throw new Error(`Invalid step transition: ${progress.step} → ${newStep}`);
+        throw new Error(
+          `Invalid step transition: ${progress.step} → ${newStep}`,
+        );
       }
       progress.step = newStep;
       if (newStep === Step.MEMORIZING) {
@@ -54,34 +58,33 @@ export class ProgressService {
     if (progress.currentSorat == sorah) {
       progress.currentAya++;
     }
-    return progress.save(); 
+    return progress.save();
   }
 
-async getDashboard(userId: string) {
-  const progress = await this.findByUser(userId);
+  async getDashboard(userId: string) {
+    const progress = await this.findByUser(userId);
 
-  const hizbSorats = Surah()[progress.currentHizb];
-  const currentSorah = hizbSorats.find(
-    s => s.number === progress.currentSorat
-  );
+    const hizbSorats = Surah()[progress.currentHizb];
+    const currentSorah = hizbSorats.find(
+      (s) => s.number === progress.currentSorat,
+    );
 
-  return {
-    currentHizb: progress.currentHizb,
-    currentSorat: progress.currentSorat,
-    currentAya: progress.currentAya,
-    currentSorahName: currentSorah?.englishName,
-    step: progress.step,
-    totalCompleted: progress.completedSorats.length,
-    completedSorats: progress.completedSorats,
-    unlockedHizbs: progress.unlockedHizbs,
-    totalStars: progress.stars,
-    badges: progress.badges,
-  };
-}
-  async completeSorah(userId: string,sorah:number) {
+    return {
+      currentHizb: progress.currentHizb,
+      currentSorat: progress.currentSorat,
+      currentAya: progress.currentAya,
+      currentSorahName: currentSorah?.englishName,
+      step: progress.step,
+      totalCompleted: progress.completedSorats.length,
+      completedSorats: progress.completedSorats,
+      unlockedHizbs: progress.unlockedHizbs,
+      totalStars: progress.stars,
+      badges: progress.badges,
+    };
+  }
+  async completeSorah(userId: string, sorah: number) {
     const progress = await this.findByUser(userId);
     if (progress.currentSorat == sorah) {
-
       if (!progress.completedSorats.includes(progress.currentSorat)) {
         progress.completedSorats.push(progress.currentSorat);
       }
@@ -110,7 +113,7 @@ async getDashboard(userId: string) {
         progress.currentSorat = nextSorah;
         progress.currentAya = 1;
         progress.step = Step.READING;
-  
+
         if (!progress.unlockedSorats.includes(nextSorah)) {
           progress.unlockedSorats.push(nextSorah);
         }
@@ -120,26 +123,29 @@ async getDashboard(userId: string) {
     return progress;
   }
 
-async adminDashboard(userId: string){
-  const users = await this.usersService.getAllUsers();
-  const TotalSoratsCompleted = (await this.progressModel.find().select('completedSorats')).reduce((acc,progress) => acc+progress.completedSorats.length ,0);
-  const TotalStars = (await this.progressModel.find().select('stars')).reduce((acc,progress) => acc+progress.stars ,0);
-  const TopLearner = await this.progressModel
-        .find()
-        .sort({starts:-1})
-        .limit(1)
-        .populate('userId','childName')
-        .exec();
-  if (!TopLearner.length) return null;
+  async adminDashboard(userId: string) {
+    const users = await this.usersService.getAllUsers();
+    const TotalSoratsCompleted = (
+      await this.progressModel.find().select('completedSorats')
+    ).reduce((acc, progress) => acc + progress.completedSorats.length, 0);
+    const TotalStars = (await this.progressModel.find().select('stars')).reduce(
+      (acc, progress) => acc + progress.stars,
+      0,
+    );
+    const TopLearner = await this.progressModel
+      .find()
+      .sort({ starts: -1 })
+      .limit(1)
+      .populate('userId', 'childName')
+      .exec();
+    if (!TopLearner.length) return null;
 
-  return {
-    user : users,
-    userNumber : users.length,
-    TotalSoratsCompleted:TotalSoratsCompleted,
-    TotalStars : TotalStars,
-    TopLearner : TopLearner[0].userId['childName'],
-  
+    return {
+      user: users,
+      userNumber: users.length,
+      TotalSoratsCompleted: TotalSoratsCompleted,
+      TotalStars: TotalStars,
+      TopLearner: TopLearner[0].userId['childName'],
+    };
   }
-
-}
 }
