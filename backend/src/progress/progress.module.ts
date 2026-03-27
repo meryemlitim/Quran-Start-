@@ -6,9 +6,14 @@ import { ProgressController } from './progress.controller';
 import { UsersModule } from 'src/users/users.module';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Progress.name, schema: ProgressSchema }]),UsersModule],
+  imports: [
+    MongooseModule.forFeature([
+      { name: Progress.name, schema: ProgressSchema },
+    ]),
+    UsersModule,
+  ],
   providers: [ProgressService],
   exports: [ProgressService],
-  controllers: [ProgressController]
+  controllers: [ProgressController],
 })
 export class ProgressModule {}

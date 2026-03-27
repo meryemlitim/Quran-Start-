@@ -14,7 +14,7 @@ import { ProgressModule } from 'src/progress/progress.module';
     UsersModule,
     PassportModule,
     ConfigModule,
-    ProgressModule, 
+    ProgressModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (config: ConfigService) => ({

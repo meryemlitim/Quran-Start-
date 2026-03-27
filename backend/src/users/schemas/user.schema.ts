@@ -21,13 +21,13 @@ export class User {
   @Prop({ required: true, trim: true })
   childName: string;
 
-  @Prop({required: true, trim: true})
-  childAge: number
-  @Prop({trime:true})
-  phoneNumber: string
+  @Prop({ required: true, trim: true })
+  childAge: number;
+  @Prop({ trime: true })
+  phoneNumber: string;
 
-  @Prop({default: true})
-  isActive: boolean
+  @Prop({ default: true })
+  isActive: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
