@@ -5,6 +5,7 @@ const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   
 });
+console.log(process.env.NEXT_PUBLIC_API_URL);
 
 // Attach JWT token to every request automatically
 api.interceptors.request.use((config) => {
