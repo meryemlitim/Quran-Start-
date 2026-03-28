@@ -13,7 +13,7 @@
 
 | | Link |
 |---|---|
-| 🚀 **Frontend** | [https://quran-start-fsk4.onrender.com](https://quran-start-fsk4.onrender.com) |
+| 🚀 **Frontend** | [https://quran-start-fsk4.onrender.com](https://quran-start-5977.onrender.com) |
 | ⚙️ **Backend API** | [https://quran-start-1.onrender.com](https://quran-start-1.onrender.com) |
 | 🎨 **Figma Design** | [View Design](https://www.figma.com/design/dyycUIgDNtp1a2F21SbouJ/CORAN-START?node-id=0-1&t=NpbiaL4L1dTBsUv6-1) |
 
