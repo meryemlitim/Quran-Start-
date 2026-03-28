@@ -2,10 +2,9 @@ import axios from 'axios';
 import Cookies from "js-cookie";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://quran-start-1.onrender.com",
   
 });
-console.log(process.env.NEXT_PUBLIC_API_URL);
 
 // Attach JWT token to every request automatically
 api.interceptors.request.use((config) => {
